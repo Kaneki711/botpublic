@@ -15,59 +15,42 @@ print "login success"
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-helpMessage =""" Chivas Bot
-[Id︎]
-[Mid]
-[Me︎]
-[TL︎:「Text」]
-[Mc 「mid」]
-[K on/off]
-[Join︎ on/off]
-[Gcancel:︎「Number of people」]
-[Group cancelalll︎]
-[Leave︎ on/off]
-[Add on/off]
-[Share on/off]
-[Message change:「text」]
-[Message check]
-[Confirm]
-[Jam on/off]
-[Change clock:「name」]
-[Up]
-[Cv join]
-
-[*] Command in the groups [*]
-
-[Curl]
-[Ourl]
-[url]
-[url:「Group ID」]
-[Invite：「mid」]
-[Kick：「mid」]
-[Ginfo]
-[jointicket]
-[Cancel]
-[Gn 「group name」]
-[Nk 「name」]
-
-[*] Command kicker only [*]
-
-[Bye]
-[Kill ban]
-[Kill 「@」]
-[Ban 「@」] By Tag
-[Unban 「@」] By Tag
-[Ban︎] Share Contact
-[Unban︎] Share Contact
-[Banlist︎]
-[Cek ban]
-[Cv mid]
-[Cv ︎invite:「mid」]
-[Cv ︎rename:「name」]
-[Cv ︎gift]
-[Respo︎n]
-[Bot cancel]
-[Title:]
+helpMessage =""" \n\n
+=======================
+     SELFBOT D.A.D     
+=======================
+⊰์◉⊱ [Id︎]
+⊰์◉⊱ [Mid]
+⊰์◉⊱ [Me︎]
+⊰์◉⊱ [TL︎:「Text」]
+⊰์◉⊱ [Mc 「mid」]
+⊰์◉⊱ [K on/off]
+⊰์◉⊱ [Join︎ on/off]
+⊰์◉⊱ [Gcancel:︎「Number of people」]
+⊰์◉⊱ [.Cancel]
+⊰์◉⊱ [Leave︎ on/off]
+⊰์◉⊱ [Add on/off]
+⊰์◉⊱ [Share on/off]
+⊰์◉⊱ [Message change:「text」]
+⊰์◉⊱ [Message check]
+⊰์◉⊱ [Buka]
+⊰์◉⊱ [Tutup]
+⊰์◉⊱ [Invite：「mid」]
+⊰์◉⊱ [Kick：「mid」]
+⊰์◉⊱ [Ginfo]
+⊰์◉⊱ [Cancel]
+⊰์◉⊱ [Gn 「group name」]
+⊰์◉⊱ [Nk 「name」]
+⊰์◉⊱ [Bye]
+⊰์◉⊱ [Kill ban]
+⊰์◉⊱ [Kill 「@」]
+⊰์◉⊱ [Ban 「@」] By Tag
+⊰์◉⊱ [Unban 「@」] By Tag
+⊰์◉⊱ [Banlist︎]
+⊰์◉⊱ [Cek ban]
+⊰์◉⊱ [Respo︎n]
+⊰์◉⊱ [Bot cancel]
+⊰์◉⊱ [Tg]
 """
 KAC=[cl,ki,kk,kc]
 mid = cl.getProfile().mid
@@ -96,8 +79,13 @@ wait = {
     "blacklist":{},
     "wblacklist":False,
     "dblacklist":False,
-    "protectionOn":True,
     "atjointicket":False
+    "qr":False,
+    "Backup":False,
+    "protectionOn":False,
+    "pnharfbot":{},
+    "pname":{},
+    "pro_name":{},
     }
 
 wait2 = {
@@ -110,6 +98,12 @@ wait2 = {
 setTime = {}
 setTime = wait2['setTime']
 
+
+contact = cl.getProfile()
+backup = cl.getProfile()
+backup.displayName = contact.displayName
+backup.statusMessage = contact.statusMessage
+backup.pictureStatus = contact.pictureStatus
 
 def sendMessage(to, text, contentMetadata={}, contentType=0):
     mes = Message()
@@ -363,6 +357,30 @@ def bot(op):
                         pass
                     else:
                         wait["blacklist"][op.param2] = True
+#===============================================
+       if op.type == 32:
+            if not op.param2 in Bots and admin:
+                if wait["protectionOn"] == True: 
+                    try:
+                        klist=[ki,kk,kc,ks,kt]
+                        kicker = random.choice(klist) 
+                        G = kicker.getGroup(op.param1)
+                        kicker.kickoutFromGroup(op.param1,[op.param2])
+                        kicker.inviteIntoGroup(op.param1, [op.param3])
+                    except Exception, e:
+                       print e
+       if op.type == 11:
+            if not op.param2 in Bots:
+              if wait["qr"] == True:  
+                try:
+                    klist=[ki,kk,kc,ks,kt]
+                    kicker = random.choice(klist) 
+                    G = kicker.getGroup(op.param1)
+                    G.preventJoinByTicket = True
+                    kicker.updateGroup(G)
+                except Exception, e:
+                    print e
+#================================================
         if op.type == 13:
             if mid in op.param3:
                 G = cl.getGroup(op.param1)
@@ -1455,6 +1473,75 @@ def bot(op):
                         kc.leaveGroup(msg.to)
                     except:
                         pass
+#======================================================
+            elif msg.text in ["Protect:hight","protect:hight"]:
+              if msg.from_ in admin:
+                if wait["protectionOn"] == True:
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"turned into high protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"turned into high protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                else:
+                    wait["protectionOn"] = True
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"turned into high protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"turned into high protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+            elif msg.text in ["Auto blockqr:off","auto blockqr:off"]:
+              if msg.from_ in admin:
+                if wait["qr"] == False:
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"Already off\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"Protection QR PRO Off\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                else:
+                    wait["qr"] = False
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"Protection QR PRO Off\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"Already off\n\n"+ datetime.today().strftime('%H:%M:%S'))
+            elif msg.text in ["Protect:low","Protect:low"]:
+              if msg.from_ in admin:
+                if wait["protectionOn"] == False:
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"turned into low protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"turned into low protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                else:
+                    wait["protectionOn"] = False
+                    if wait["lang"] == "JP":
+                        cl.sendText(msg.to,"turned into low protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+                    else:
+                        cl.sendText(msg.to,"turned into low protection\n\n"+ datetime.today().strftime('%H:%M:%S'))
+
+            elif "Namelock:on" in msg.text:
+              if msg.from_ in admin:
+                if msg.to in wait['pname']:
+                    cl.sendText(msg.to,"ƬƲƦƝЄƊ ƠƝ.")
+                else:
+                    cl.sendText(msg.to,"ƛԼƦЄƛƊƳ ƠƝ")
+                    wait['pname'][msg.to] = True
+                    wait['pro_name'][msg.to] = cl.getGroup(msg.to).name
+            elif "Namelock:off" in msg.text:
+              if msg.from_ in admin:
+                if msg.to in wait['pname']:
+                    cl.sendText(msg.to,"ƬƲƦƝ ƠƑƑ.")
+                    del wait['pname'][msg.to]
+                else:
+                    cl.sendText(msg.to,"ƛԼƦЄƛƊƳ ƠƑƑ")
+					
+            elif "Blockinvite:on" == msg.text:
+              if msg.from_ in admin:
+				gid = msg.to
+				autocancel[gid] = "poni"
+				cl.sendText(msg.to,"ƤƦƠƬЄƇƬ ƖƝƔƖƬƛƬƖƠƝ ƠƝ")
+            elif "Blockinvite:off" == msg.text:
+              if msg.from_ in admin:
+				try:
+					del autocancel[msg.to]
+					cl.sendText(msg.to,"ƤƦƠƬЄƇƬ ƖƝƔƖƬƛƬƖƠƝ ƠƑƑ")
+				except:
+					pass
 #-----------------------------------------------
             elif msg.text in ["Tg","Tag all"]:
                 group = cl.getGroup(msg.to)
